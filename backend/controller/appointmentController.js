@@ -1,5 +1,5 @@
-import Appointment from '../database/Appointment.js';
-import User from '../database/User.js';
+import Appointment from '../models/Appointment.js';
+import User from '../models/User.js';
 
 export const bookAppointment = async (req, res) => {
   try {
