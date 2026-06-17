@@ -6,7 +6,13 @@ const appointmentSchema = new mongoose.Schema({
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
   status: { type: String, enum: ['pending', 'approved', 'completed', 'cancelled'], default: 'pending' },
-  notes: { type: String }
+  notes: { type: String },
+  // Yahan maine 'reason' field add kar di hai
+  reason: {
+    type: String,
+    default: '',
+    trim: true,
+  }
 }, { timestamps: true });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);
