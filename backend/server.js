@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import doctorRoutes from './routes/doctorRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
 
 // import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -30,6 +31,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/doctors', doctorRoutes);
+app.use('/api/appointments', appointmentRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
