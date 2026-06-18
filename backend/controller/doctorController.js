@@ -1,3 +1,4 @@
+import Appointment from '../models/Appointment.js';
 import User from '../models/User.js';
 
 export const getAllDoctors = async (req, res) => {
@@ -38,6 +39,55 @@ export const getSingleDoctor = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Server error while fetching doctor',
+      data: { error: error.message },
+    });
+  }
+};
+
+export const getDoctorDashboard = async (req, res) => {
+  try {
+    const doctorId = req.user._id;
+
+    const totalAppointments = await Appointment.countDocuments({
+      doctorId: doctorId,
+    });
+
+    const pendingAppointments = await Appointment.countDocuments({
+      doctorId: doctorId,
+      status: 'pending',
+    });
+
+    const approvedAppointments = await Appointment.countDocuments({
+      doctorId: doctorId,
+      status: 'approved',
+    });
+
+    const completedAppointments = await Appointment.countDocuments({
+      doctorId: doctorId,
+      status: 'completed',
+    });
+
+    const cancelledAppointments = await Appointment.countDocuments({
+      doctorId: doctorId,
+      status: 'cancelled',
+    });
+    return res.status(200).json({
+      success: true,
+      message: 'Doctor dashboard fetched successfully',
+      data: {
+        totalAppointments,
+        pendingAppointments,
+        approvedAppointments,
+        completedAppointments,
+        cancelledAppointments,
+      },
+    });
+  } catch (error) {
+    console.error('getDoctorDashboard error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while fetching doctor dashboard',
       data: { error: error.message },
     });
   }
