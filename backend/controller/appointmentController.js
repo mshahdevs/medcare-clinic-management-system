@@ -7,19 +7,33 @@ export const bookAppointment = async (req, res) => {
     const { doctor, appointmentDate, appointmentTime, reason } = req.body;
 
     if (!doctor || !appointmentDate || !appointmentTime) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         message: 'doctor, appointmentDate and appointmentTime are required',
         data: {},
       });
     }
+
+    const appointmentDateObj = new Date(appointmentDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (appointmentDateObj < today) {
+      return res.status(400).json({
+        success: false,
+        message: 'Appointment date cannot be in the past',
+        data: {},
+      });
+    }
+
     const doctors = await User.findOne({
       _id: doctor,
       role: 'doctor',
       isActive: true,
     });
+
     if (!doctors) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: 'Doctor not found',
         data: {},
@@ -39,14 +53,15 @@ export const bookAppointment = async (req, res) => {
       to: req.user.email,
       subject: 'Appointment Booked Successfully',
       html: `
-      <h2>Appointment Booked Successfully</h2>
-      <p>Your appointment has been booked.</p>
-      <p><strong>Doctor:</strong> ${doctor.fullName}</p>
-      <p><strong>Date:</strong> ${appointmentDate}</p>
-      <p><strong>Time:</strong> ${appointmentTime}</p>
-      <p><strong>Status:</strong> Pending</p>
-    `,
+        <h2>Appointment Booked Successfully</h2>
+        <p>Your appointment has been booked.</p>
+        <p><strong>Doctor:</strong> ${doctors.fullName}</p>
+        <p><strong>Date:</strong> ${appointmentDate}</p>
+        <p><strong>Time:</strong> ${appointmentTime}</p>
+        <p><strong>Status:</strong> Pending</p>
+      `,
     });
+
     return res.status(201).json({
       success: true,
       message: 'Appointment booked successfully',
@@ -57,9 +72,10 @@ export const bookAppointment = async (req, res) => {
   } catch (error) {
     console.error('bookAppointment error:', error);
     console.log(error.stack);
+
     return res.status(500).json({
       success: false,
-      message: 'Server error while fetching appointment',
+      message: 'Server error while booking appointment',
       data: { error: error.message },
     });
   }
