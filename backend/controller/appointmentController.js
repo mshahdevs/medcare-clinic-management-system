@@ -4,21 +4,21 @@ import sendEmail from '../utils/sendEmail.js';
 
 export const bookAppointment = async (req, res) => {
   try {
-    const { doctorId, appointmentDate, appointmentTime, reason } = req.body;
+    const { doctor, appointmentDate, appointmentTime, reason } = req.body;
 
-    if (!doctorId || !appointmentDate || !appointmentTime) {
+    if (!doctor || !appointmentDate || !appointmentTime) {
       res.status(400).json({
         success: false,
-        message: 'doctorId, appointmentDate and appointmentTime are required',
+        message: 'doctor, appointmentDate and appointmentTime are required',
         data: {},
       });
     }
-    const doctor = await User.findOne({
-      _id: doctorId,
+    const doctors = await User.findOne({
+      _id: doctor,
       role: 'doctor',
       isActive: true,
     });
-    if (!doctor) {
+    if (!doctors) {
       res.status(404).json({
         success: false,
         message: 'Doctor not found',
@@ -27,8 +27,8 @@ export const bookAppointment = async (req, res) => {
     }
 
     const appointment = await Appointment.create({
-      patientId: req.user._id,
-      doctorId,
+      patient: req.user._id,
+      doctor,
       appointmentDate,
       appointmentTime,
       reason,
@@ -69,10 +69,10 @@ export const getMyAppointments = async (req, res) => {
   try {
     // console.log('Current user:', req.user._id);
     const appointments = await Appointment.find({
-      patientId: req.user._id,
+      patient: req.user._id,
     })
       .populate(
-        'doctorId',
+        'doctor',
         'fullName specialization qualification consultationFee phone',
       )
       .sort({ createdAt: -1 });
@@ -97,8 +97,8 @@ export const getMyAppointments = async (req, res) => {
 export const getAllAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find()
-      .populate('patientId', 'fullName email phone')
-      .populate('doctorId', 'fullName specialization consultationFee')
+      .populate('patient', 'fullName email phone')
+      .populate('doctor', 'fullName specialization consultationFee')
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
@@ -133,8 +133,8 @@ export const updateAppointmentStatus = async (req, res) => {
     }
 
     const appointment = await Appointment.findById(req.params.id)
-      .populate('patientId', 'fullName email')
-      .populate('doctorId', 'fullName');
+      .populate('patient', 'fullName email')
+      .populate('doctor', 'fullName');
     if (!appointment) {
       return res.status(404).json({
         success: false,
@@ -147,15 +147,15 @@ export const updateAppointmentStatus = async (req, res) => {
 
     await appointment.save();
 
-    if (appointment.patientId?.email) {
+    if (appointment.patient?.email) {
       await sendEmail({
-        to: appointment.patientId.email,
+        to: appointment.patient.email,
         subject: `Appointment ${status.toUpperCase()}`,
         html: `
       <h2>Appointment Status Updated</h2>
-      <p>Hello ${appointment.patientId.fullName},</p>
+      <p>Hello ${appointment.patient.fullName},</p>
       <p>Your appointment status has been updated.</p>
-      <p><strong>Doctor:</strong> ${appointment.doctorId?.fullName || 'Doctor'}</p>
+      <p><strong>Doctor:</strong> ${appointment.doctor?.fullName || 'Doctor'}</p>
       <p><strong>Status:</strong> ${status}</p>
       <p>Thank you for choosing MedCare.</p>
     `,
@@ -181,9 +181,9 @@ export const updateAppointmentStatus = async (req, res) => {
 export const getDoctorAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({
-      doctorId: req.user._id,
+      doctor: req.user._id,
     })
-      .populate('patientId', 'fullName email phone gender age')
+      .populate('patient', 'fullName email phone gender age')
       .sort({ createdAt: -1 });
 
     return res.status(200).json({
