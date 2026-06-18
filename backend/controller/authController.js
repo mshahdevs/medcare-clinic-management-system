@@ -28,23 +28,23 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    const normalizedRole = role ? String(role).toLowerCase() : 'patient';
+    // const normalizedRole = role ? String(role).toLowerCase() : 'patient';
 
-    if (!validRoles.includes(normalizedRole)) {
-      return res.status(400).json({
-        success: false,
-        message: `Role must be one of: ${validRoles.join(', ')}`,
-        data: {},
-      });
-    }
+    // if (!validRoles.includes(normalizedRole)) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: `Role must be one of: ${validRoles.join(', ')}`,
+    //     data: {},
+    //   });
+    // }
 
-    if (normalizedRole !== 'patient') {
-      return res.status(403).json({
-        success: false,
-        message: 'Only patients can self-register',
-        data: {},
-      });
-    }
+    // if (normalizedRole !== 'patient') {
+    //   return res.status(403).json({
+    //     success: false,
+    //     message: 'Only patients can self-register',
+    //     data: {},
+    //   });
+    // }
 
     const existingUser = await User.findOne({
       email: email.toLowerCase().trim(),
@@ -63,7 +63,7 @@ export const registerUser = async (req, res) => {
       email: email.toLowerCase().trim(),
       password,
       phone,
-      role: normalizedRole,
+      role,
       gender,
       age,
       address,
