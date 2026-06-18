@@ -26,6 +26,22 @@ export const createDoctor = async (req, res) => {
       });
     }
 
+    if (experience !== undefined && experience < 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Experience cannot be negative',
+        data: {},
+      });
+    }
+
+    if (consultationFee !== undefined && consultationFee <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Consultation fee must be greater than 0',
+        data: {},
+      });
+    }
+
     const existingUser = await User.findOne({
       email: email.toLowerCase().trim(),
     });
@@ -53,6 +69,7 @@ export const createDoctor = async (req, res) => {
       consultationFee,
       isActive: true,
     });
+
     return res.status(201).json({
       success: true,
       message: 'Doctor created successfully',
