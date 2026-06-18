@@ -46,29 +46,29 @@ export const getSingleDoctor = async (req, res) => {
 
 export const getDoctorDashboard = async (req, res) => {
   try {
-    const doctorId = req.user._id;
+    const doctor = req.user._id;
 
     const totalAppointments = await Appointment.countDocuments({
-      doctorId: doctorId,
+      doctor: doctor,
     });
 
     const pendingAppointments = await Appointment.countDocuments({
-      doctorId: doctorId,
+      doctor: doctor,
       status: 'pending',
     });
 
     const approvedAppointments = await Appointment.countDocuments({
-      doctorId: doctorId,
+      doctor: doctor,
       status: 'approved',
     });
 
     const completedAppointments = await Appointment.countDocuments({
-      doctorId: doctorId,
+      doctor: doctor,
       status: 'completed',
     });
 
     const cancelledAppointments = await Appointment.countDocuments({
-      doctorId: doctorId,
+      doctor: doctor,
       status: 'cancelled',
     });
     return res.status(200).json({
