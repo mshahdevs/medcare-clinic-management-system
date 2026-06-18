@@ -1,3 +1,4 @@
+import Appointment from '../models/Appointment.js';
 import User from '../models/User.js';
 import generateToken from '../utils/generateToken.js';
 export const createDoctor = async (req, res) => {
@@ -81,6 +82,34 @@ export const createDoctor = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Server error while creating doctor',
+      data: { error: error.message },
+    });
+  }
+};
+
+export const getDashboard = async (req, res) => {
+  try {
+    const totalPatients = await User.countDocuments({ role: 'patient' });
+    const totalDoctors = await User.countDocuments({ role: 'doctor' });
+    const totalAppointments = await Appointment.countDocuments();
+    const pendingAppointments = await Appointment.countDocuments({
+      status: 'pending',
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: 'Admin dashboard fetched successfully',
+      data: {
+        totalPatients,
+        totalDoctors,
+        totalAppointments,
+        pendingAppointments,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while fetching dashboard',
       data: { error: error.message },
     });
   }
