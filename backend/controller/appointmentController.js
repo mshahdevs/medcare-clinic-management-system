@@ -53,15 +53,87 @@ export const bookAppointment = async (req, res) => {
       to: req.user.email,
       subject: 'Appointment Booked Successfully',
       html: `
-        <h2>Appointment Booked Successfully</h2>
-        <p>Your appointment has been booked.</p>
-        <p><strong>Doctor:</strong> ${doctors.fullName}</p>
-        <p><strong>Date:</strong> ${appointmentDate}</p>
-        <p><strong>Time:</strong> ${appointmentTime}</p>
-        <p><strong>Status:</strong> Pending</p>
-      `,
-    });
+  <div style="font-family: Arial, sans-serif; background:#f4f7fb; padding:40px 20px;">
+    <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
 
+      <div style="background:#0f766e; padding:25px; text-align:center;">
+        <h1 style="color:#ffffff; margin:0;">🏥 MediBook</h1>
+        <p style="color:#d1fae5; margin-top:8px;">
+          Your Trusted Healthcare Platform
+        </p>
+      </div>
+
+      <div style="padding:35px;">
+        <h2 style="color:#111827; margin-bottom:20px;">
+          Appointment Booked Successfully 🎉
+        </h2>
+
+        <p style="color:#4b5563; font-size:16px;">
+          Hello <strong>${req.user.fullName}</strong>,
+        </p>
+
+        <p style="color:#4b5563; line-height:1.7;">
+          Your appointment has been successfully booked. Here are the details:
+        </p>
+
+        <div style="
+          background:#f9fafb;
+          border-left:4px solid #0f766e;
+          padding:20px;
+          margin:25px 0;
+          border-radius:8px;
+        ">
+          <p><strong>👨‍⚕️ Doctor:</strong> ${doctors.fullName}</p>
+          <p><strong>📅 Date:</strong> ${appointmentDate}</p>
+          <p><strong>⏰ Time:</strong> ${appointmentTime}</p>
+          <p>
+            <strong>📌 Status:</strong>
+            <span style="
+              background:#fef3c7;
+              color:#92400e;
+              padding:4px 10px;
+              border-radius:20px;
+              font-size:13px;
+            ">
+              Pending
+            </span>
+          </p>
+        </div>
+
+        <p style="color:#6b7280;">
+          We will notify you once the doctor approves your appointment.
+        </p>
+
+        <div style="text-align:center; margin-top:30px;">
+          <a href="${process.env.FRONTEND_URL}"
+             style="
+               background:#0f766e;
+               color:white;
+               text-decoration:none;
+               padding:12px 24px;
+               border-radius:8px;
+               display:inline-block;
+               font-weight:bold;
+             ">
+             View My Appointments
+          </a>
+        </div>
+      </div>
+
+      <div style="
+        background:#f3f4f6;
+        text-align:center;
+        padding:20px;
+        color:#6b7280;
+        font-size:13px;
+      ">
+        © 2026 MediBook. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+  `,
+    });
     return res.status(201).json({
       success: true,
       message: 'Appointment booked successfully',
@@ -162,19 +234,77 @@ export const updateAppointmentStatus = async (req, res) => {
     appointment.status = status;
 
     await appointment.save();
+    let badgeBg = '#d1fae5';
+    let badgeColor = '#065f46';
 
+    if (status === 'pending') {
+      badgeBg = '#fef3c7';
+      badgeColor = '#92400e';
+    } else if (status === 'approved') {
+      badgeBg = '#dbeafe';
+      badgeColor = '#1e40af';
+    } else if (status === 'completed') {
+      badgeBg = '#d1fae5';
+      badgeColor = '#065f46';
+    } else if (status === 'cancelled') {
+      badgeBg = '#fee2e2';
+      badgeColor = '#b91c1c';
+    }
     if (appointment.patient?.email) {
       await sendEmail({
         to: appointment.patient.email,
         subject: `Appointment ${status.toUpperCase()}`,
         html: `
-      <h2>Appointment Status Updated</h2>
-      <p>Hello ${appointment.patient.fullName},</p>
-      <p>Your appointment status has been updated.</p>
-      <p><strong>Doctor:</strong> ${appointment.doctor?.fullName || 'Doctor'}</p>
-      <p><strong>Status:</strong> ${status}</p>
-      <p>Thank you for choosing MedCare.</p>
-    `,
+  <div style="font-family: Arial, sans-serif; background:#f4f7fb; padding:40px 20px;">
+    <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
+
+      <div style="background:#0f766e; padding:25px; text-align:center;">
+        <h1 style="color:#ffffff; margin:0;">🏥 MediBook</h1>
+        <p style="color:#d1fae5; margin-top:8px;">Your Trusted Healthcare Platform</p>
+      </div>
+
+      <div style="padding:35px;">
+        <h2 style="color:#111827;">Appointment Status Updated</h2>
+
+        <p style="color:#4b5563; font-size:16px;">
+          Hello <strong>${appointment.patient.fullName}</strong>,
+        </p>
+
+        <p style="color:#4b5563;">
+          Your appointment status has been updated.
+        </p>
+
+        <div style="background:#f9fafb; border-left:4px solid #0f766e; padding:20px; margin:25px 0; border-radius:8px;">
+          <p><strong>👨‍⚕️ Doctor:</strong> ${appointment.doctor?.fullName || 'Doctor'}</p>
+          <p>
+            <strong>📌 Status:</strong>
+           <span
+  style="
+    background:${badgeBg};
+    color:${badgeColor};
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:bold;
+  "
+>
+  ${status.toUpperCase()}
+</span>
+          </p>
+        </div>
+
+        <p style="color:#6b7280;">
+          Thank you for choosing MediBook.
+        </p>
+      </div>
+
+      <div style="background:#f3f4f6; text-align:center; padding:20px; color:#6b7280; font-size:13px;">
+        © 2026 MediBook. All rights reserved.
+      </div>
+
+    </div>
+  </div>
+  `,
       });
     }
 
