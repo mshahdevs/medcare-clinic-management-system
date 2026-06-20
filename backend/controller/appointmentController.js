@@ -57,7 +57,7 @@ export const bookAppointment = async (req, res) => {
     <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
 
       <div style="background:#0f766e; padding:25px; text-align:center;">
-        <h1 style="color:#ffffff; margin:0;">🏥 MediBook</h1>
+        <h1 style="color:#ffffff; margin:0;">🏥 MedCare</h1>
         <p style="color:#d1fae5; margin-top:8px;">
           Your Trusted Healthcare Platform
         </p>
@@ -127,7 +127,7 @@ export const bookAppointment = async (req, res) => {
         color:#6b7280;
         font-size:13px;
       ">
-        © 2026 MediBook. All rights reserved.
+        © 2026 MedCare. All rights reserved.
       </div>
 
     </div>
@@ -259,7 +259,7 @@ export const updateAppointmentStatus = async (req, res) => {
     <div style="max-width:600px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.08);">
 
       <div style="background:#0f766e; padding:25px; text-align:center;">
-        <h1 style="color:#ffffff; margin:0;">🏥 MediBook</h1>
+        <h1 style="color:#ffffff; margin:0;">🏥 MedCare</h1>
         <p style="color:#d1fae5; margin-top:8px;">Your Trusted Healthcare Platform</p>
       </div>
 
@@ -294,12 +294,12 @@ export const updateAppointmentStatus = async (req, res) => {
         </div>
 
         <p style="color:#6b7280;">
-          Thank you for choosing MediBook.
+          Thank you for choosing MedCare.
         </p>
       </div>
 
       <div style="background:#f3f4f6; text-align:center; padding:20px; color:#6b7280; font-size:13px;">
-        © 2026 MediBook. All rights reserved.
+        © 2026 MedCare. All rights reserved.
       </div>
 
     </div>
