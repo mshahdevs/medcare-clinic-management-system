@@ -3,6 +3,7 @@ import {
   getAllDoctors,
   getDoctorDashboard,
   getSingleDoctor,
+  updateDoctor,
 } from '../controller/doctorController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { authorize } from '../middleware/roleMiddleware.js';
@@ -17,5 +18,6 @@ router.get(
   authorize('doctor'),
   getDoctorDashboard,
 );
+router.put('/:id', protect, authorize('admin'), updateDoctor);
 
 export default router;
