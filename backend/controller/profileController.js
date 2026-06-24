@@ -43,7 +43,14 @@ export const updateMyProfile = async (req, res) => {
         data: {},
       });
     }
-    const allowedFields = ['fullName', 'phone', 'gender', 'age', 'address'];
+    const allowedFields = [
+      'fullName',
+      'phone',
+      'gender',
+      'bloodGroup',
+      'dob',
+      'address',
+    ];
     if (req.user.role === 'doctor') {
       allowedFields.push(
         'specialization',
