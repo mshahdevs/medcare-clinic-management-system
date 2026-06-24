@@ -324,6 +324,51 @@ export const updateAppointmentStatus = async (req, res) => {
   }
 };
 
+export const cancelAppointment = async (req, res) => {
+  try {
+    const appointment = await Appointment.findById(req.params.id);
+
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Appointment not found',
+      });
+    }
+
+    // Sirf owner patient cancel kar sakta hai
+    if (appointment.patient.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized',
+      });
+    }
+
+    if (
+      appointment.status === 'completed' ||
+      appointment.status === 'cancelled'
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: 'Appointment cannot be cancelled',
+      });
+    }
+
+    appointment.status = 'cancelled';
+    await appointment.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Appointment cancelled successfully',
+      data: appointment,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const getDoctorAppointments = async (req, res) => {
   try {
     const appointments = await Appointment.find({
