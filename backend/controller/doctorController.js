@@ -27,8 +27,10 @@ export const getAllDoctors = async (req, res) => {
 
 export const getSingleDoctor = async (req, res) => {
   try {
-    const doctor = await User.findById(req.params.id);
-    console.log(doctor);
+    const doctor = await User.findById(req.params.id).select(
+      'fullName email phone specialization qualification consultationFee experience workingDays startTime endTime',
+    );
+    // console.log(doctor);
     return res.status(200).json({
       success: true,
       data: doctor,
