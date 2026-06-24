@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
     if (!fullName || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'fullName, email, password and role are required',
+        message: 'fullName, email and password are required',
         data: {},
       });
     }
