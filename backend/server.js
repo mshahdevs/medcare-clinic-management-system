@@ -26,7 +26,7 @@ app.use(
       'http://localhost:5173',
       'http://localhost:3000',
       'https://online-doctor-appointment-system-five.vercel.app/',
-      'https://medcare-frontend-shah.vercel.app/',
+      'https://medcare-frontend-shah.vercel.app',
     ],
     credentials: true,
   }),
