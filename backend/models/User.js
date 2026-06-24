@@ -1,27 +1,38 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-const userSchema = new mongoose.Schema({
-  fullName: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  phone: { type: String },
-  role: { 
-    type: String, 
-    enum: ['patient', 'doctor', 'admin'], 
-    default: 'patient' 
+const userSchema = new mongoose.Schema(
+  {
+    fullName: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    phone: { type: String },
+    role: {
+      type: String,
+      enum: ['patient', 'doctor', 'admin'],
+      default: 'patient',
+    },
+    gender: { type: String },
+    age: { type: Number },
+    address: { type: String },
+    isActive: { type: Boolean, default: true },
+    workingDays: [String],
+    startTime: {
+      type: String,
+      default: '09:00 AM',
+    },
+    endTime: {
+      type: String,
+      default: '05:00 PM',
+    },
+    // Doctor-specific fields (optional)
+    specialization: { type: String },
+    experience: { type: String },
+    qualification: { type: String },
+    consultationFee: { type: Number },
   },
-  gender: { type: String },
-  age: { type: Number },
-  address: { type: String },
-  isActive: { type: Boolean, default: true },
-  
-  // Doctor-specific fields (optional)
-  specialization: { type: String },
-  experience: { type: String },
-  qualification: { type: String },
-  consultationFee: { type: Number }
-}, { timestamps: true });
+  { timestamps: true },
+);
 
 // Password hashing ka logic (Save hone se pehle)
 userSchema.pre('save', async function (next) {
