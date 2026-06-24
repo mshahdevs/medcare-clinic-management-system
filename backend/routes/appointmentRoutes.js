@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   bookAppointment,
+  cancelAppointment,
   getAllAppointments,
   getDoctorAppointments,
   getMyAppointments,
@@ -17,5 +18,5 @@ router.get('/', protect, authorize('admin'), getAllAppointments);
 router.get('/doctor/my', protect, authorize('doctor'), getDoctorAppointments);
 
 router.put('/:id/status', protect, authorize('admin'), updateAppointmentStatus);
-
+router.put('/:id/cancel', protect, authorize('patient'), cancelAppointment);
 export default router;
