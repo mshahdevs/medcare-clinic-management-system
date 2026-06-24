@@ -46,6 +46,66 @@ export const getSingleDoctor = async (req, res) => {
   }
 };
 
+export const updateDoctor = async (req, res) => {
+  try {
+    const {
+      fullName,
+      phone,
+      specialization,
+      experience,
+      qualification,
+      consultationFee,
+      workingDays,
+      startTime,
+      endTime,
+    } = req.body;
+
+    const doctor = await User.findById(req.params.id);
+
+    if (!doctor) {
+      return res.status(404).json({
+        success: false,
+        message: 'Doctor not found',
+      });
+    }
+
+    if (doctor.role !== 'doctor') {
+      return res.status(400).json({
+        success: false,
+        message: 'User is not a doctor',
+      });
+    }
+
+    doctor.fullName = fullName || doctor.fullName;
+    doctor.phone = phone || doctor.phone;
+    doctor.specialization = specialization || doctor.specialization;
+    doctor.experience = experience || doctor.experience;
+    doctor.qualification = qualification || doctor.qualification;
+    doctor.consultationFee = consultationFee ?? doctor.consultationFee;
+
+    doctor.workingDays = workingDays || doctor.workingDays;
+    doctor.startTime = startTime || doctor.startTime;
+    doctor.endTime = endTime || doctor.endTime;
+
+    await doctor.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Doctor updated successfully',
+      data: doctor,
+    });
+  } catch (error) {
+    console.error('updateDoctor error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while updating doctor',
+      data: {
+        error: error.message,
+      },
+    });
+  }
+};
 export const getDoctorDashboard = async (req, res) => {
   try {
     const doctor = req.user._id;
