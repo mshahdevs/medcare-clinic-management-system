@@ -14,6 +14,13 @@ const userSchema = new mongoose.Schema(
     },
     gender: { type: String },
     age: { type: Number },
+    bloodGroup: {
+      type: String,
+    },
+
+    dob: {
+      type: Date,
+    },
     address: { type: String },
     isActive: { type: Boolean, default: true },
     workingDays: [String],
