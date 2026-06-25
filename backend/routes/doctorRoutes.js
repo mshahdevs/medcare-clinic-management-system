@@ -4,6 +4,7 @@ import {
   getDoctorDashboard,
   getSingleDoctor,
   updateDoctor,
+  deleteDoctor
 } from '../controller/doctorController.js';
 import { protect } from '../middleware/authMiddleware.js';
 import { authorize } from '../middleware/roleMiddleware.js';
