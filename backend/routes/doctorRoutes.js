@@ -19,5 +19,11 @@ router.get(
   getDoctorDashboard,
 );
 router.put('/:id', protect, authorize('admin'), updateDoctor);
+router.delete(
+  '/:id',
+  protect,
+  authorize('admin'),
+  deleteDoctor
+);
 
 export default router;
