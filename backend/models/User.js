@@ -25,13 +25,13 @@ const userSchema = new mongoose.Schema(
     isActive: { type: Boolean, default: true },
     workingDays: [String],
     startTime: {
-      type: String,
-      default: '09:00 AM',
-    },
-    endTime: {
-      type: String,
-      default: '05:00 PM',
-    },
+  type: String,
+  default: '09:00',
+},
+endTime: {
+  type: String,
+  default: '17:00',
+},
     // Doctor-specific fields (optional)
     specialization: { type: String },
     experience: { type: String },
