@@ -131,3 +131,30 @@ export const getDashboard = async (req, res) => {
     });
   }
 };
+
+export const getAllPatients = async (req, res) => {
+  try {
+    const patients = await User.find({
+      role: 'patient',
+      isActive: true,
+    })
+      .select('fullName email')
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: patients.length,
+      data: patients,
+    });
+  } catch (error) {
+    console.error('getAllPatients error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while fetching patients',
+      data: {
+        error: error.message,
+      },
+    });
+  }
+};
