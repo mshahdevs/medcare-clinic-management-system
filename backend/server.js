@@ -11,6 +11,7 @@ import doctorRoutes from './routes/doctorRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import patientRoutes from './routes/patientRoutes.js';
+import notificationRoutes from './routes/notificationRoutes.js';
 
 // import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -49,6 +50,7 @@ app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/patient', patientRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
