@@ -154,3 +154,28 @@ export const getDoctorDashboard = async (req, res) => {
     });
   }
 };
+
+export const deleteDoctor = async (req, res) => {
+  try {
+    const doctor = await User.findById(req.params.id);
+
+    if (!doctor || doctor.role !== 'doctor') {
+      return res.status(404).json({
+        success: false,
+        message: 'Doctor not found',
+      });
+    }
+
+    await doctor.deleteOne();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Doctor deleted successfully',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

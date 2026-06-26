@@ -49,6 +49,7 @@ export const updateMyProfile = async (req, res) => {
       'gender',
       'bloodGroup',
       'dob',
+      'age',
       'address',
     ];
     if (req.user.role === 'doctor') {

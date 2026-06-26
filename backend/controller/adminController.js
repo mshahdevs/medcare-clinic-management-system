@@ -5,18 +5,20 @@ export const createDoctor = async (req, res) => {
   try {
     const {
       fullName,
-      email,
-      password,
-      phone,
-      role,
-      gender,
-      age,
-      address,
-      specialization,
-      experience,
-      qualification,
-      consultationFee,
-    } = req.body;
+  email,
+  password,
+  phone,
+  gender,
+  age,
+  address,
+  specialization,
+  experience,
+  qualification,
+  consultationFee,
+  workingDays,
+  startTime,
+  endTime,
+} = req.body;
 
     if (!fullName || !email || !password || !specialization) {
       return res.status(400).json({
@@ -67,6 +69,9 @@ export const createDoctor = async (req, res) => {
       experience,
       qualification,
       consultationFee,
+       workingDays,
+  startTime,
+  endTime,
       isActive: true,
     });
 
@@ -87,6 +92,9 @@ export const createDoctor = async (req, res) => {
           qualification: doctor.qualification,
           consultationFee: doctor.consultationFee,
           address: doctor.address,
+          workingDays: doctor.workingDays,
+startTime: doctor.startTime,
+endTime: doctor.endTime,
           isActive: doctor.isActive,
           createdAt: doctor.createdAt,
         },
