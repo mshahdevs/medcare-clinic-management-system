@@ -1,4 +1,5 @@
 import Appointment from '../models/Appointment.js';
+import Notification from '../models/Notification.js';
 import User from '../models/User.js';
 import sendEmail from '../utils/sendEmail.js';
 
@@ -251,6 +252,34 @@ export const updateAppointmentStatus = async (req, res) => {
     appointment.status = status;
 
     await appointment.save();
+    let notificationMessage = '';
+
+switch (status) {
+  case 'approved':
+    notificationMessage = 'Your appointment has been approved.';
+    break;
+
+  case 'completed':
+    notificationMessage = 'Your appointment has been completed.';
+    break;
+
+  case 'cancelled':
+    notificationMessage = 'Your appointment has been cancelled.';
+    break;
+
+  case 'pending':
+    notificationMessage = 'Your appointment is pending.';
+    break;
+}
+
+try {
+  await Notification.create({
+    patient: appointment.patient._id,
+    message: notificationMessage,
+  });
+} catch (err) {
+  console.error('Notification creation failed:', err);
+}
     let badgeBg = '#d1fae5';
     let badgeColor = '#065f46';
 
