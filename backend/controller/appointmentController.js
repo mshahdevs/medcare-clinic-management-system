@@ -248,6 +248,13 @@ export const updateAppointmentStatus = async (req, res) => {
         data: {},
       });
     }
+if (appointment.status === status) {
+  return res.status(400).json({
+    success: false,
+    message: `Appointment is already ${status}`,
+    data: {},
+  });
+}
 
     appointment.status = status;
 
