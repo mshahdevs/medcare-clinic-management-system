@@ -1,9 +1,6 @@
 import Notification from '../models/Notification.js';
 import User from '../models/User.js';
 
-// ================================
-// Admin -> Send Notification
-// ================================
 export const sendNotification = async (req, res) => {
   try {
     const { patient, message } = req.body;
@@ -94,6 +91,43 @@ export const getMyNotifications = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Server error while fetching notifications',
+      data: {
+        error: error.message,
+      },
+    });
+  }
+};
+
+export const markNotificationAsRead = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const notification = await Notification.findOne({
+      _id: id,
+      patient: req.user._id,
+    });
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: 'Notification not found',
+        data: {},
+      });
+    }
+
+    notification.read = true;
+    await notification.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Notification marked as read',
+      data: notification,
+    });
+  } catch (error) {
+    console.error('markNotificationAsRead error:', error);
+
+    return res.status(500).json({
+      success: false,
+      message: 'Server error while updating notification',
       data: {
         error: error.message,
       },
