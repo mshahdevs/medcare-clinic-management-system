@@ -17,6 +17,6 @@ router.post('/', protect, authorize('admin'), sendNotification);
 router.get('/', protect, authorize('admin'), getAllNotifications);
 
 router.get('/my', protect, authorize('patient'), getMyNotifications);
-router.get('/:id/read', protect, authorize('patient'), markNotificationAsRead);
+router.put('/:id/read', protect, authorize('patient'), markNotificationAsRead);
 
 export default router;
